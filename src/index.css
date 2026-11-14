@@ -1,0 +1,342 @@
+@import "tailwindcss";
+
+/*
+ * ORBIT-X design tokens — "flight director console"
+ * Tinted graphite surfaces, one signal-orange accent (+ a warm sand tint of
+ * the same hue for telemetry values), restrained status colours.
+ * Token names are kept from the original theme so every page picks them up.
+ */
+:root {
+  /* Night operations (dark) — carbon ground */
+  --bg-primary: #0b0c0e;
+  --bg-secondary: #101114;
+  --bg-panel: #141518;
+  --bg-elevated: #1b1d21;
+
+  /* NASA red for action, agency blue for data and links */
+  --accent-blue: #fc3d21;
+  --accent-cyan: #8fb4ff;
+  --accent-light: #ff6a52;
+  --nasa-blue: #0b3d91;
+
+  --status-success: #2fbf71;
+  --status-warning: #f2a93b;
+  --status-danger: #ff5a4d;
+
+  --text-primary: #f2f3f5;
+  --text-secondary: #a9aeb6;
+  --text-muted: #7b818a;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-prominent: rgba(255, 255, 255, 0.15);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(16, 17, 20, 0.9);
+
+  --shadow-tint: 0, 0, 0;
+  --panel-highlight: rgba(255, 255, 255, 0.03);
+
+  --app-font-sans: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --app-font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  --z-base: 1;
+  --z-header: 30;
+  --z-overlay: 40;
+  --z-drawer: 50;
+  --z-toast: 60;
+
+  color-scheme: dark;
+}
+
+/* Day operations (light) — the Graphics Standards Manual: paper white, carbon ink, NASA red */
+:root.light,
+[data-theme='light'] {
+  --bg-primary: #f5f6f7;
+  --bg-secondary: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-elevated: #eef0f2;
+
+  --accent-blue: #d2301b;   /* NASA red, darkened for AA with white text */
+  --accent-cyan: #0b3d91;   /* agency blue */
+  --accent-light: #fc3d21;
+  --nasa-blue: #0b3d91;
+
+  --status-success: #12784a;
+  --status-warning: #a35f00;
+  --status-danger: #c42b1c;
+
+  --text-primary: #121316;
+  --text-secondary: #474c54;
+  --text-muted: #686d76;
+
+  --border-subtle: #dfe2e6;
+  --border-prominent: #c4c8ce;
+  --card-border: #dfe2e6;
+  --glass-bg: rgba(255, 255, 255, 0.95);
+
+  --shadow-tint: 18, 19, 22;
+  --panel-highlight: rgba(255, 255, 255, 1);
+
+  color-scheme: light;
+}
+
+@theme {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-panel: var(--bg-panel);
+  --color-bg-elevated: var(--bg-elevated);
+
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-light: var(--accent-light);
+
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-danger: var(--status-danger);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
+
+  --spacing-18: 4.5rem;
+  --spacing-88: 22rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Square-cut corners, after the 1975 manual's crisp forms */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 5px;
+  --radius-2xl: 6px;
+  --radius-3xl: 8px;
+}
+
+/* ---------- Base ---------- */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--app-font-sans);
+  font-feature-settings: 'ss01', 'cv11';
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Every monospace readout uses tabular figures so numbers don't jitter */
+.font-mono,
+code,
+kbd,
+samp {
+  font-family: var(--app-font-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  letter-spacing: -0.01em;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessible focus ring everywhere */
+:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: var(--z-toast);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: var(--accent-blue);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- Surfaces ---------- */
+
+/* Film grain to break digital flatness — fixed and non-interactive */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root.light body::after {
+  opacity: 0;
+}
+
+/* Panel: tinted shadow + 1px inner top highlight for edge refraction */
+.panel-surface {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(var(--shadow-tint), 0.06);
+}
+
+/* Faint engineering grid used behind headers and empty areas */
+.bg-blueprint {
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at top left, #000 20%, transparent 75%);
+}
+
+/* Ambient glow + faint starfield behind the app workspace */
+.app-ambient {
+  background: var(--bg-primary);
+}
+
+/* Always-dark "space" surfaces (hero cards, 3D viewports) keep light text in both themes */
+.force-dark {
+  --text-primary: #f1f4f9;
+  --text-secondary: #a3adbd;
+  --text-muted: #7c869a;
+  --border-subtle: rgba(140, 170, 220, 0.09);
+  --accent-cyan: #7fb2ff;
+  --color-text-primary: #f1f4f9;
+  --color-text-secondary: #a3adbd;
+  --color-text-muted: #7c869a;
+  --color-accent-cyan: #7fb2ff;
+  --color-bg-panel: #0d1320;
+  --color-bg-elevated: #131b2c;
+  color: #f1f4f9;
+}
+:root.light .force-dark .border-white\/10,
+:root.light .force-dark .border-white\/15 {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+:root.light .force-dark .hover\:bg-white\/\[0\.06\]:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Small uppercase label used above headings and readouts */
+.eyebrow {
+  font-family: var(--app-font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Pulsing live indicator */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+.live-dot {
+  animation: live-pulse 2s ease-in-out infinite;
+}
+
+/* Shimmer for skeleton loaders */
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-panel) 50%, var(--bg-elevated) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 8px;
+}
+
+/* ---------- Light-mode overrides for hard-coded white/x utilities ---------- */
+:root.light .border-white\/5,
+:root.light .border-white\/10,
+:root.light .border-white\/15,
+:root.light .border-white\/20 {
+  border-color: var(--border-subtle) !important;
+}
+
+:root.light .hover\:bg-white\/5:hover,
+:root.light .hover\:bg-white\/10:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+:root.light .bg-white\/5,
+:root.light .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.035) !important;
+}
+
+/* ---------- Scrollbar & selection ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-prominent) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-prominent);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+  background-clip: padding-box;
+}
+
+::selection {
+  background-color: rgba(252, 61, 33, 0.3);
+  color: var(--text-primary);
+}
+
+/* ---------- Motion safety ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

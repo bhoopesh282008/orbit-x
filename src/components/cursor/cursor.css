@@ -1,0 +1,39 @@
+/* =========================================================================
+   ORBIT-X HOLOGRAPHIC TARGETING CURSOR & GLOBAL NATIVE SUPPRESSION
+   ========================================================================= */
+
+/* Hide native desktop arrow across all document elements */
+html.orbit-x-custom-cursor,
+html.orbit-x-custom-cursor body,
+html.orbit-x-custom-cursor a,
+html.orbit-x-custom-cursor button,
+html.orbit-x-custom-cursor [role="button"],
+html.orbit-x-custom-cursor select,
+html.orbit-x-custom-cursor canvas,
+html.orbit-x-custom-cursor div,
+html.orbit-x-custom-cursor span,
+html.orbit-x-custom-cursor p,
+html.orbit-x-custom-cursor svg,
+html.orbit-x-custom-cursor path {
+  cursor: none !important;
+}
+
+/* Explicit native text-selection exceptions: editable fields */
+html.orbit-x-custom-cursor input,
+html.orbit-x-custom-cursor textarea,
+html.orbit-x-custom-cursor [contenteditable="true"] {
+  cursor: text !important;
+}
+
+/* Fixed HUD Canvas Overlay */
+.orbit-cursor-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 2147483647 !important; /* Always sits on top */
+  overflow: hidden !important;
+  display: block !important;
+}
